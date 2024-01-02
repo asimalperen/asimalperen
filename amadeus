@@ -1,0 +1,40 @@
+import requests
+
+def test_http_status_code():
+    response = requests.get("https://flights-api.buraky.workers.dev/")
+    assert response.status_code == 200
+import requests
+import json
+
+def test_response_content():
+    response = requests.get("https://flights-api.buraky.workers.dev/")
+    data = response.json()
+    assert isinstance(data, dict) and "data" in data and isinstance(data["data"], list)
+import requests
+
+def test_response_headers():
+    response = requests.get("https://flights-api.buraky.workers.dev/")
+    assert "Content-Type" in response.headers and response.headers["Content-Type"] == "application/json"
+import { test, expect } from "@playwright/test";
+
+test("Same city cannot be entered in 'From' and 'To' fields", async ({ page }) => {
+    await page.goto("https://flights-app.pages.dev/");
+    await page.fill('input[name="from"]', "Istanbul");
+    await page.fill('input[name="to"]', "Istanbul");
+    const fromValue = await page.getAttribute('input[name="from"]', 'value');
+    const toValue = await page.getAttribute('input[name="to"]', 'value');
+    expect(fromValue).not.toEqual(toValue);
+});
+import { test, expect } from "@playwright/test";
+
+test("Number of listed flights matches the 'Found X items' count", async ({ page }) => {
+    await page.goto("https://flights-app.pages.dev/");
+    await page.fill('input[name="from"]', "Istanbul");
+    await page.fill('input[name="to"]', "Los Angeles");
+    await page.click('button[type="submit"]');
+    const foundItemsText = await page.textContent('.found-items');
+    const numberOfListedFlights = await page.$$('.flight-item');
+
+    const expectedCount = parseInt(foundItemsText.split(' ')[1]);
+    expect(numberOfListedFlights.length).toEqual(expectedCount);
+});
